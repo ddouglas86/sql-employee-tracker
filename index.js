@@ -63,6 +63,18 @@ const runPrompt = async () => {
             updateEmpRole();
             break;
         case 'Exit':
-            connection.end();
+            console.log('Bye!')
+            db.end();
     }; 
-}
+};
+
+viewAllDept = async () => {
+    console.log("Now Viewing All Departments");
+    const sqlPrompt = "SELECT * FROM department";
+    db.query(sqlPrompt, (err, res) => {
+        if (err) return console.log(err);
+        console.table(res);
+        runPrompt();
+    })
+};
+
