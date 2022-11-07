@@ -78,3 +78,12 @@ viewAllDept = async () => {
     })
 };
 
+viewAllRoles = async () => {
+    console.log("Now Viewing All Roles");
+    const sqlPrompt = "SELECT role.id, role.title, role.salary, department.name AS department FROM role LEFT JOIN department ON role.department_id= department.id";
+    db.query(sqlPrompt, (err, res) => {
+        if (err) return console.log(err);
+        console.table(res);
+        runPrompt();
+    })
+};
