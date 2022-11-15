@@ -87,3 +87,39 @@ viewAllRoles = async () => {
         runPrompt();
     })
 };
+
+viewAllEmp = async () => {
+    console.log("Now Viewing All Employees");
+    const sqlPrompt = "SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name AS department, CONCAT(employee.first_name, employee.last_name) AS manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN manager ON employee.manager_id = manager_index.id";
+    db.query(sqlPrompt, (err, res) => {
+        if (err) return console.log(err);
+        console.table(res);
+        runPrompt();
+    })
+};
+
+addDept = async () => {
+    const newDept = inquirer.prompt([
+        {
+        type: 'input',
+        name: 'name',
+        message: 'What is the name of the new Department?',
+        validate: input => {
+            if (input) {
+                return true;
+            } else {
+                console.log ('Error! Department name cannot be empty');
+                return false;
+            }
+        }
+        }
+    ])
+    .then(newDept => {
+    const sqlPrompt = "INSERT INTO department (name) VALUES (?)";
+    db.query(sqlPrompt, newDept.name, (err, res) => {
+        if (err) return console.log(err);
+        console.log(newDept.name + " has been successfully added!");
+        runPrompt();
+    })
+    })
+};
