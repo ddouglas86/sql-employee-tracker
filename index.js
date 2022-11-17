@@ -165,15 +165,17 @@ addRole = async () => {
                 message: 'Which department is this new role in?',
                 choices: deptChoices
             }
-        ]);
-        //This skips the choice section and needs to be fixed
-        newRoleData.push(roleDeptChoice.value);
+        ])
+        
+        .then(roleDeptChoice => {
+        newRoleData.push(roleDeptChoice.choice);
         const sqlPrompt = 'INSERT INTO role (title, salary, department_id) VALUES (?,?,?)';
         db.query(sqlPrompt, newRoleData, (err, res) => {
             if (err) return console.log(err);
-            console.log(newRole.title + ' has been successfully added to ' + roleDeptChoice.name);
+            console.log(newRole.title + ' has been successfully added');
             runPrompt();
         })
+    })
     });
     })
 };
