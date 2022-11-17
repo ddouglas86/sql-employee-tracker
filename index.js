@@ -87,10 +87,10 @@ viewAllRoles = async () => {
         runPrompt();
     })
 };
-// code below does not pull up employees. states Table company_db.manager does not exist
+
 viewAllEmp = async () => {
     console.log("Now Viewing All Employees");
-    const sqlPrompt = "SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name AS department, CONCAT(employee.first_name, employee.last_name) AS manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN manager ON employee.manager_id = manager_index.id";
+    const sqlPrompt = "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, CONCAT(manager.first_name, ' ' , manager.last_name) AS 'manager' FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id";
     db.query(sqlPrompt, (err, res) => {
         if (err) return console.log(err);
         console.table(res);
@@ -182,3 +182,63 @@ addRole = async () => {
     });
     })
 };
+
+addEmp = async () => {
+    const newEmployee = inquirer.prompt([
+        {
+            type: 'input',
+            name: 'firstName',
+            message: 'Please enter their first name',
+            validate: input => {
+                if (input) {
+                    return true;
+                } else {
+                console.log('Error! Field cannot be empty');
+                return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'lastName',
+            message: 'Please enter their last name',
+            validate: input => {
+                if (input) {
+                    return true;
+                } else {
+                    console.log('Error! Field cannot be empty');
+                    return false;
+                }
+            }
+        }
+    ])
+    .then(newEmployee => {
+        const newEmployeeData = [newEmployee.firstName, newEmployee.lastName];
+        const sqlPrompt = 'SELECT id, title FROM role';
+        db.query(sqlPrompt, (err, res) => {
+            if (err) return (err);
+            const newEmployeeRole = res.map(({ id, title }) => ({ name: title, value: id }));
+
+            const roleChoice = inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'role',
+                    message: 'Please choose a role for the new employee',
+                    choices: newEmployeeRole
+                } 
+            ])
+            .then(roleChoice => {
+                newEmployeeData.push(roleChoice);
+                console.log(newEmployeeData);
+                const sqlPrompt = 'INSERT INTO employee (first_name, last_name, role.id) VALUES (?,?,?)';
+                db.query(sqlPrompt, newEmployeeData, (err, res) => {
+                    if (err) return (err);
+                    console.log(newEmployee.firstName + '' + newEmployee.lastName + ' has been added!');
+                    runPrompt();
+                })
+            });
+
+        })
+    })
+    
+}
