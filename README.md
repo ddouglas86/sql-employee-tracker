@@ -23,7 +23,8 @@
   ### Open the integrated terminal once installed and use command 'node index.js'. Once connected, follow the prompts on screen to manage the database.
 
   ## Screenshot
-  ### 
+  ### [Untitled_ Nov 17, 2022 2_32 AM.webm](https://user-images.githubusercontent.com/53360057/202401151-0bd5cde0-1270-4c15-a1f1-d2a32f102f5c.webm)
+
 
   ## Questions? Reach me here:
   ### https://github.com/ddouglas86
