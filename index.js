@@ -155,14 +155,9 @@ addRole = async () => {
     ])
     .then(newRole => {
         const newRoleData = [newRole.title, newRole.salary];
-        const deptView = db.query('SELECT * from department', (err, res) => {
+        const deptView = db.query('SELECT id, name FROM department', (err, res) => {
             if (err) return (err); 
-            const deptChoices = res.map((newRoleDept) => {
-                return{
-                name: newRoleDept.name,
-                value: newRoleDept.id
-                }
-            });
+            const deptChoices = res.map(({ id, name }) => ({ name: name, value: id }));
         const roleDeptChoice = inquirer.prompt([
             {
                 type: 'list',
