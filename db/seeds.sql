@@ -27,12 +27,12 @@ VALUES ("CEO", 500000, 1),
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("Josie", "Frost", 1, NULL),
 ("Michael", "McAulay", 2, NULL),
-("Jemma", "Mahone", 5, 9),
 ("Pamela", "Thatchet", 9, NULL),
 ("John", "Carrot", 10, 1),
 ("Regina", "Kay", 4, 1),
-("Raeshel", "McDaniels", 13, 8),
 ("Jamie", "Folger", 14, 2),
+("Raeshel", "McDaniels", 13, 6),
 ("Tom", "Fellows", 14, 1),
+("Jemma", "Mahone", 5, 8),
 ("Macy", "Sorbet", 11, 7);
 
