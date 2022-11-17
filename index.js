@@ -226,7 +226,7 @@ addEmp = async () => {
             ])
             .then(roleChoice => {
                 newEmployeeData.push(roleChoice.choice);
-                const sqlPrompt = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?, NULL)';
+                const sqlPrompt = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)';
                 db.query(sqlPrompt, newEmployeeData, (err, res) => {
                     if (err) return console.log (err);
                     console.log(newEmployee.firstName + ' ' + newEmployee.lastName + ' has been added!');
@@ -237,4 +237,21 @@ addEmp = async () => {
         })
     })
     
+};
+
+updateEmpRole = async () => {
+    const sqlPrompt = 'SELECT id, first_name, last_name FROM employee';
+    db.query(sqlPrompt, (err, res) => {
+        if (err) return console.log(err);
+        const employeeList = res.map(({ id, first_name, last_name }) => ({ name: first_name + ' ' + last_name, id: id }));
+
+        const employeeChoice = inquirer.prompt([
+            {
+                type: 'list',
+                name: 'choice',
+                message: 'Please choose an employee to update',
+                choices: employeeList
+            }
+        ])
+    })
 }
