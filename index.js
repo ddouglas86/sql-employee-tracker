@@ -243,7 +243,7 @@ updateEmpRole = async () => {
     const sqlPrompt = 'SELECT id, first_name, last_name FROM employee';
     db.query(sqlPrompt, (err, res) => {
         if (err) return console.log(err);
-        const employeeList = res.map(({ id, first_name, last_name }) => ({ name: first_name + ' ' + last_name, id: id }));
+        const employeeList = res.map(({ id, first_name, last_name }) => ({ name: first_name + ' ' + last_name, value: id }));
 
         const employeeChoice = inquirer.prompt([
             {
@@ -253,5 +253,33 @@ updateEmpRole = async () => {
                 choices: employeeList
             }
         ])
+        .then(employeeChoice => {
+            // console.log(employeeChoice.choice);
+            const updateData = [employeeChoice.choice];
+            const sqlPrompt = 'SELECT id, title FROM role';
+            db.query(sqlPrompt, (err, res) => {
+                if (err) return console.log(err);
+                const roleList = res.map(({ id, title }) => ({ name: title, value: id }));
+
+                const newRoleChoice = inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'choice',
+                        message: 'Select a new role',
+                        choices: roleList
+                    }
+                ])
+                .then(newRoleChoice => {
+                    // console.log(newRoleChoice.choice);
+                    updateData.unshift(newRoleChoice.choice);
+                    const sqlPrompt = 'UPDATE employee SET role_id = ? WHERE id = ?';
+                    db.query(sqlPrompt, updateData, (err, res) => {
+                        if (err) return console.log(err);
+                        console.log('Successfully updated!');
+                        runPrompt();
+                    })
+                })
+            })
+        })
     })
 }
