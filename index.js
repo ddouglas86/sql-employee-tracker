@@ -12,7 +12,7 @@ const db = mysql.createConnection(
         password: '',
         database: 'company_db'
     },
-    console.log('Successfully connected!')
+    console.log('\u001b[1;32m----Successfully connected!----')
   );
   
   db.connect(function (err){
@@ -26,7 +26,7 @@ const runPrompt = async () => {
     let selection = await inquirer.prompt({
         type: 'list',
         name: 'choice',
-        message: 'What would you like to do?',
+        message: '\u001b[1;43mWhat would you like to do?',
         choices: [
             'View All Departments',
             'View All Roles',
@@ -69,8 +69,8 @@ const runPrompt = async () => {
 };
 
 viewAllDept = async () => {
-    console.log("Now Viewing All Departments");
-    const sqlPrompt = "SELECT * FROM department";
+    console.log('\u001b[1;35m----Now Viewing All Departments----\u001b[0m');
+    const sqlPrompt = 'SELECT * FROM department';
     db.query(sqlPrompt, (err, res) => {
         if (err) return console.log(err);
         console.table(res);
@@ -79,8 +79,8 @@ viewAllDept = async () => {
 };
 
 viewAllRoles = async () => {
-    console.log("Now Viewing All Roles");
-    const sqlPrompt = "SELECT role.id, role.title, role.salary, department.name AS department FROM role LEFT JOIN department ON role.department_id= department.id";
+    console.log('\u001b[1;35m----Now Viewing All Roles----\u001b[0m');
+    const sqlPrompt = 'SELECT role.id, role.title, role.salary, department.name AS department FROM role LEFT JOIN department ON role.department_id= department.id';
     db.query(sqlPrompt, (err, res) => {
         if (err) return console.log(err);
         console.table(res);
@@ -89,7 +89,7 @@ viewAllRoles = async () => {
 };
 
 viewAllEmp = async () => {
-    console.log("Now Viewing All Employees");
+    console.log('\u001b[1;35m----Now Viewing All Employees----\u001b[0m');
     const sqlPrompt = "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, CONCAT(manager.first_name, ' ' , manager.last_name) AS 'manager' FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id";
     db.query(sqlPrompt, (err, res) => {
         if (err) return console.log(err);
@@ -108,7 +108,7 @@ addDept = async () => {
             if (input) {
                 return true;
             } else {
-                console.log ('Error! Department name cannot be empty');
+                console.log ('\u001b[1;31mError! Department name cannot be empty');
                 return false;
             }
         }
@@ -118,7 +118,7 @@ addDept = async () => {
     const sqlPrompt = 'INSERT INTO department (name) VALUES (?)';
     db.query(sqlPrompt, newDept.name, (err, res) => {
         if (err) return console.log(err);
-        console.log(newDept.name + ' has been successfully added!');
+        console.log(newDept.name + '\u001b[1;32m has been successfully added!');
         runPrompt();
     })
     })
@@ -134,7 +134,7 @@ addRole = async () => {
                 if (input) {
                     return true;
                 } else {
-                    console.log('Error! Role title cannot be empty!');
+                    console.log('\u001b[1;31mError! Role title cannot be empty!');
                     return false;
                 }
             }
@@ -147,7 +147,7 @@ addRole = async () => {
                 if (input) {
                     return true;
                 } else {
-                    console.log('Error! Salary cannot be empty!');
+                    console.log('\u001b[1;31mError! Salary cannot be empty!');
                     return false;
                 }
             }
@@ -172,7 +172,7 @@ addRole = async () => {
         const sqlPrompt = 'INSERT INTO role (title, salary, department_id) VALUES (?,?,?)';
         db.query(sqlPrompt, newRoleData, (err, res) => {
             if (err) return console.log(err);
-            console.log(newRole.title + ' has been successfully added');
+            console.log(newRole.title + '\u001b[1;32m has been successfully added');
             runPrompt();
         })
     })
@@ -190,7 +190,7 @@ addEmp = async () => {
                 if (input) {
                     return true;
                 } else {
-                console.log('Error! Field cannot be empty');
+                console.log('\u001b[1;31mError! Field cannot be empty');
                 return false;
                 }
             }
@@ -203,7 +203,7 @@ addEmp = async () => {
                 if (input) {
                     return true;
                 } else {
-                    console.log('Error! Field cannot be empty');
+                    console.log('\u001b[1;31mError! Field cannot be empty');
                     return false;
                 }
             }
@@ -253,7 +253,7 @@ addEmp = async () => {
                         const sqlPrompt = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)';
                         db.query(sqlPrompt, newEmployeeData, (err, res) => {
                             if (err) return console.log (err);
-                            console.log(newEmployee.firstName + ' ' + newEmployee.lastName + ' has been added!');
+                            console.log(newEmployee.firstName + ' ' + newEmployee.lastName + '\u001b[1;32m has been added!');
                             runPrompt();
                 })
             });
@@ -301,7 +301,7 @@ updateEmpRole = async () => {
                     const sqlPrompt = 'UPDATE employee SET role_id = ? WHERE id = ?';
                     db.query(sqlPrompt, updateData, (err, res) => {
                         if (err) return console.log(err);
-                        console.log('Successfully updated!');
+                        console.log('\u001b[1;32mSuccessfully updated!');
                         runPrompt();
                     })
                 })
