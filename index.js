@@ -219,18 +219,17 @@ addEmp = async () => {
             const roleChoice = inquirer.prompt([
                 {
                     type: 'list',
-                    name: 'role',
+                    name: 'choice',
                     message: 'Please choose a role for the new employee',
                     choices: newEmployeeRole
                 } 
             ])
             .then(roleChoice => {
-                newEmployeeData.push(roleChoice);
-                console.log(newEmployeeData);
-                const sqlPrompt = 'INSERT INTO employee (first_name, last_name, role.id) VALUES (?,?,?)';
+                newEmployeeData.push(roleChoice.choice);
+                const sqlPrompt = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?, NULL)';
                 db.query(sqlPrompt, newEmployeeData, (err, res) => {
-                    if (err) return (err);
-                    console.log(newEmployee.firstName + '' + newEmployee.lastName + ' has been added!');
+                    if (err) return console.log (err);
+                    console.log(newEmployee.firstName + ' ' + newEmployee.lastName + ' has been added!');
                     runPrompt();
                 })
             });
